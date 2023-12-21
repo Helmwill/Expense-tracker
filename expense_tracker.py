@@ -42,21 +42,29 @@ def create_tables(connection):
             FOREIGN KEY (CategoryID) REFERENCES IncomeCategories(CategoryID)
                 )
             ''')
+    connection.commit()
+
+    def add_expense_category(connection, category_name):
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO ExpenseCategories(CategoryName) VALUES (?)", (category_name))
         connection.commit()
+        print(f"Expense category '{category_name}' added successfully.")
 
+    def delete_expense_category(connection, category_id):
+        cursor = connection.cursor()
+        cursor.execute("INSERT INTO Expense")
+        #cursor.execute("SELECT COUNT (*) FROM expenses")
+      #  count = cursor.fetchone()[0]
 
-        cursor.execute("SELECT COUNT (*) FROM expenses")
-        count = cursor.fetchone()[0]
+      #  if count == 0:
+       #     example_values = [
+       #         ('22-07-28', "dinner out", 0, 27,),
+       #         ('22-07-28', "monthly pay main job", 3000, 0),
+        #        ('22-07-31', "holiday paid", 0, 1279),
+        #        ('22-08-06', "weekly shop", 0, 125),
 
-        if count == 0:
-            example_values = [
-                ('22-07-28', "dinner out", 0, 27,),
-                ('22-07-28', "monthly pay main job", 3000, 0),
-                ('22-07-31', "holiday paid", 0, 1279),
-                ('22-08-06', "weekly shop", 0, 125),
-            ]
-            cursor.executemany('INSERT INTO expenses(Date, Description, Income, Expenses) VALUES (?,?,?,?)', example_values)
-            ft_db.commit()
-            print("Expense examples added to the database")
-        else:
-            print("Records already exist in the database")
+       #     cursor.executemany('INSERT INTO expenses(Date, Description, Income, Expenses) VALUES (?,?,?,?)', example_values)
+       #     ft_db.commit()
+       #     print("Expense examples added to the database")
+       # else:
+       #     print("Records already exist in the database")
