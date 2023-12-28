@@ -84,4 +84,38 @@ def add_income(connection, date, description, amount, category_id):
     connection.commit()
     print("Income added successfully.")
 
-def view_expense_categories(conne)
+def view_expense_categories(connection):
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM ExpenseCategories")
+    rows = cursor.fetchall()
+    print("Expense Categories: ")
+    for row in rows: 
+        print(f"ID: {row[0]}, Name: {row[1]}")
+
+def view_income_categories(connection):
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM IncomeCategories")
+    rows = cursor.fetchall()
+    print("Income Categories: ")
+    for row in rows:
+        print(f"{row[0]}, Name: {row[1]}")
+
+def calculate_budget(connection):
+    cursor = connection.cursor()
+    cursor.execute("SELECT SUM(Amount) FROM Expenses")
+    total_expenses = cursor.fetchone()[0]
+    cursor.execute("SELECT SUM(Amount) FROM Expenses")
+    total_income = cursor.fetchone()[0]
+
+    if total_income is None:
+        total_income = 0
+    if total_expenses is None:
+        total_expenses = 0 
+
+    budget = total_income - total_expenses
+    print(f"Total income: {total_income}")
+    print(f"Total expenses: {total_expenses}")
+    print(f"Budget: {budget}")
+
+
+            
