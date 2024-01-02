@@ -15,6 +15,7 @@ def create_tables(connection):
     try:
         cursor = connection.cursor()
 
+        #ExpenseCategories table
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS ExpenseCategories (
             CategoryId INTEGER PRIMARY KEY, 
@@ -23,7 +24,7 @@ def create_tables(connection):
             FinancialGoal INTEGER
         )
     ''')
-
+        #Expenses table
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS Expenses (
             ExpenseID INTEGER PRIMARY KEY,
@@ -34,7 +35,7 @@ def create_tables(connection):
             FOREIGN KEY (CategoryID) REFERENCES ExpenseCategories(CategoryID)
         )
     ''')
-
+        #IncomeCategories table
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS IncomeCategories (
             CategoryID INTEGER PRIMARY KEY,
@@ -43,7 +44,7 @@ def create_tables(connection):
             FinancialGoal INTEGER
         )
     ''')
-
+        #Income table
         cursor.execute('''
         CREATE TABLE IF NOT EXISTS Income (
             IncomeID INTEGER PRIMARY KEY,
@@ -54,12 +55,21 @@ def create_tables(connection):
             FOREIGN KEY (CategoryID) REFERENCES IncomeCategories(CategoryID)
         )
     ''')
-
+        #commit the changes
         connection.commit()
     except sqlite3.Error as e:
         print(f"Error creating tables: {e}")
-
 def add_expense_category(connection, category_name):
+    """
+    This function adds a new expense category to the ExpenseCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    category_name (str): The name of the expense category to be added.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("INSERT INTO ExpenseCategories(CategoryName) VALUES (?)", (category_name,))
@@ -69,6 +79,16 @@ def add_expense_category(connection, category_name):
         print(f"Error adding expense category: {e}")
 
 def delete_expense_category(connection, category_id):
+    """
+    This function deletes an expense category from the ExpenseCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    category_id (int): The ID of the expense category to be deleted.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("DELETE FROM ExpenseCategories WHERE CategoryId = ?", (category_id,))
@@ -78,6 +98,19 @@ def delete_expense_category(connection, category_id):
         print(f"Error deleting expense category: {e}")
 
 def add_expense(connection, date, description, amount, category_id):
+    """
+    This function adds a new expense to the Expenses table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    date (str): The date of the expense.
+    description (str): The description of the expense.
+    amount (int): The amount of the expense.
+    category_id (int): The ID of the expense category.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("INSERT INTO Expenses(Date, Description, Amount, CategoryID) VALUES (?,?,?,?)",
@@ -88,6 +121,16 @@ def add_expense(connection, date, description, amount, category_id):
         print(f"Error adding expense: {e}")
 
 def add_income_category(connection, category_name): 
+    """
+    This function adds a new income category to the IncomeCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    category_name (str): The name of the income category to be added.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("INSERT INTO IncomeCategories(CategoryName) VALUES (?)", (category_name,))
@@ -97,6 +140,16 @@ def add_income_category(connection, category_name):
         print(f"Error adding income category: {e}")
 
 def delete_income_category(connection, category_id):
+    """
+    This function deletes an income category from the IncomeCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    category_id (int): The ID of the income category to be deleted.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("DELETE FROM IncomeCategories WHERE CategoryID = ?", (category_id,))
@@ -106,6 +159,19 @@ def delete_income_category(connection, category_id):
         print(f"Error deleting income category: {e}")
 
 def add_income(connection, date, description, amount, category_id):
+    """
+    This function adds a new income to the Income table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    date (str): The date of the income.
+    description (str): The description of the income.
+    amount (int): The amount of the income.
+    category_id (int): The ID of the income category.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("INSERT INTO Income(Date, Description, Amount, CategoryID) VALUES (?,?,?,?)", 
@@ -116,6 +182,15 @@ def add_income(connection, date, description, amount, category_id):
         print(f"Error adding income: {e}")
 
 def view_expense_categories(connection):
+    """
+    This function retrieves and prints all expense categories from the ExpenseCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM ExpenseCategories")
@@ -128,6 +203,15 @@ def view_expense_categories(connection):
         print(f"Error viewing expense categories: {e}")
 
 def view_income_categories(connection):
+    """
+    This function retrieves and prints all income categories from the IncomeCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM IncomeCategories")
@@ -140,6 +224,15 @@ def view_income_categories(connection):
         print(f"Error viewing income categories: {e}")
 
 def calculate_budget(connection):
+    """
+    This function calculates the budget by subtracting the total expenses from the total income.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+
+    Returns:
+    float: The calculated budget.
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT SUM(Amount) FROM Expenses")
@@ -161,6 +254,15 @@ def calculate_budget(connection):
         print(f"Error calculating budget: {e}")
 
 def view_expenses(connection):
+    """
+    This function retrieves and prints all expenses from the Expenses table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM Expenses")
@@ -173,6 +275,15 @@ def view_expenses(connection):
         print(f"Error viewing expenses: {e}")
 
 def view_income(connection):
+    """
+    This function retrieves and prints all income from the Income table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM Income")
@@ -185,6 +296,18 @@ def view_income(connection):
         print(f"Error viewing income: {e}")
 
 def set_financial_goal(connection, category_id, goal_amount, goal_type):
+    """
+    This function sets a financial goal for a specific category in the ExpenseCategories or IncomeCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    category_id (int): The ID of the category.
+    goal_amount (float): The financial goal amount to be set.
+    goal_type (str): The type of the goal, either 'expense' or 'income'.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         if goal_type.lower() == 'expense':
@@ -202,6 +325,15 @@ def set_financial_goal(connection, category_id, goal_amount, goal_type):
 
 
 def view_expense_financial_goal(connection):
+    """
+    This function retrieves and prints the financial goals for all expense categories from the ExpenseCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT CategoryId, CategoryName, FinancialGoal FROM ExpenseCategories")
@@ -216,6 +348,15 @@ def view_expense_financial_goal(connection):
         
         
 def view_income_financial_goal(connection):
+    """
+    This function retrieves and prints the financial goals for all income categories from the IncomeCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT CategoryID, CategoryName, FinancialGoal FROM IncomeCategories")
@@ -229,6 +370,17 @@ def view_income_financial_goal(connection):
         print(f"Error viewing income categories financial goals: {e}")
 
 def set_budget(connection, category_id, budget_amount):
+    """
+    This function sets the budget for a specific expense category in the ExpenseCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    category_id (int): The ID of the expense category.
+    budget_amount (float): The budget amount to be set.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("UPDATE ExpenseCategories SET Budget = ? WHERE CategoryId = ?", (budget_amount, category_id))
@@ -239,6 +391,16 @@ def set_budget(connection, category_id, budget_amount):
 
 
 def view_category_budget(connection, category_id):
+    """
+    This function retrieves and prints the budget for a specific expense category from the ExpenseCategories table.
+
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    category_id (int): The ID of the expense category.
+
+    Returns:
+    None
+    """
     try:
         cursor = connection.cursor()
         cursor.execute("SELECT CategoryName, Budget FROM ExpenseCategories WHERE CategoryId = ?", (category_id,))
@@ -255,10 +417,23 @@ def view_category_budget(connection, category_id):
             
 
 def main():
+    """
+    This function is the main entry point of the program. It connects to the database, creates the necessary tables,
+    and provides a menu for the user to interact with the finance tracker.
+
+    Parameters:
+    None
+
+    Returns:
+    None
+    """
+    #connect to the database
     connection = db_connect()
+    #create the tables if they do not already exist
     create_tables(connection)
         
     while True:
+        #print the menu options
         print("\n-- Finance Tracker --")
         print("1. Add new expense category")
         print("2. Delete expense category")
@@ -276,65 +451,84 @@ def main():
         print("14. View income financial goals")
         print("0. Exit")
 
+        #Users selects what they want to do
         choice = input("Enter your choice: ")
 
+        #perform the selected action 
         if choice == '1':
+            #add new expense category
             category_name = input("Enter new expense category name: ")
             add_expense_category(connection, category_name)
         elif choice == '2':
+            #delete expense category
             category_id = int(input("Enter ID of the expense category to delete: "))
             delete_expense_category(connection, category_id)
         elif choice == '3':
+            #add expense
             date = input("Enter date (YYYY-MM-DD): ")
             description = input("Enter description: ")
             amount = float(input("Enter amount: "))
             category_id = int(input("Enter category ID: "))
             add_expense(connection, date, description, amount, category_id)
         elif choice == '4':
+            #view expenses
             view_expenses(connection)
         elif choice == '5':
+            #add new income category
             category_name = input("Enter new income category name: ")
             add_income_category(connection, category_name)
         elif choice == '6':
+            #delete income category
             category_id = int(input("Enter ID of the income category to delete: "))
             delete_income_category(connection, category_id)
         elif choice == '7':
+            #add income
             date = input("Enter date (YYYY-MM-DD): ")
             description = input("Enter description: ")
             amount = int(input("Enter amount: "))
             category_id = int(input("Enter category ID: "))
             add_income(connection, date, description, amount, category_id)
         elif choice == '8':
+            #view income
             view_income(connection)
         elif choice == '9':
+            #view expense categories
             view_expense_categories(connection)
         elif choice == '10':
+            #view income categories
             view_income_categories(connection)
         elif choice == '11':
+            #calculate total budget
              calculate_budget (connection)
         elif choice == '12':
+            #set financial goal
             goal_type = input("Enter goal type (expense or income): ")
             category_id = int(input("Enter category ID: "))
             goal_amount = float(input("Enter financial goal amount: "))
             set_financial_goal(connection, category_id, goal_amount, goal_type)
         elif choice == '13':
+            #view expense financial goals
             view_expense_financial_goal(connection)
         elif choice == '14':
+            #view income financial goals
             view_income_financial_goal(connection)
         elif choice == '15':
+            #set budget
             category_id = int(input("Enter category ID: "))
             budget_amount = int(input("Enter budget amount: "))
             set_budget(connection, category_id, budget_amount)
         elif choice == '16':
+            #view category budget
             category_id = int(input("Enter category ID: "))
             view_category_budget(connection, category_id)
         elif choice == '0':
+            #exit the program
             print("Exiting...")
             break
         else:
             print("Invalid choice. Please enter a valid option.")
-
+    #close the connection to the database
     connection.close()
-
+#call the main function
 if __name__ == "__main__":
     main()
