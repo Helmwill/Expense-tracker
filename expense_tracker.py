@@ -413,7 +413,25 @@ def view_category_budget(connection, category_id):
     except sqlite3.Error as e:
         print(f"Error viewing category budget: {e}")
 
+def view_all_categories(connection, table_name):
+    """
+    This function retrieves and prints all categories from the specified table.
 
+    Parameters:
+    connection (sqlite3.Connection): The connection object to the SQLite database.
+    table_name (str): The name of the table to retrieve categories from.
+
+    Returns:
+    None
+    """
+    try:
+        cursor = connection.cursor()
+        cursor.execute(f"SELECT * FROM {table_name}")
+        rows = cursor.fetchall()
+        for row in rows:
+            print(row)
+    except sqlite3.Error as e:
+        print(f"Error retrieving categories: {e}")
             
 
 def main():
@@ -457,10 +475,12 @@ def main():
         #perform the selected action 
         if choice == '1':
             #add new expense category
+            view_all_categories(connection, "IncomeCategories")
             category_name = input("Enter new expense category name: ")
             add_expense_category(connection, category_name)
         elif choice == '2':
             #delete expense category
+            view_all_categories(connection, "IncomeCategories")
             category_id = int(input("Enter ID of the expense category to delete: "))
             delete_expense_category(connection, category_id)
         elif choice == '3':
@@ -475,10 +495,12 @@ def main():
             view_expenses(connection)
         elif choice == '5':
             #add new income category
+            view_all_categories(connection, "IncomeCategories")
             category_name = input("Enter new income category name: ")
             add_income_category(connection, category_name)
         elif choice == '6':
             #delete income category
+            view_all_categories(connection, "IncomeCategories")
             category_id = int(input("Enter ID of the income category to delete: "))
             delete_income_category(connection, category_id)
         elif choice == '7':
