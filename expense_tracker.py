@@ -351,7 +351,7 @@ def view_expense_financial_goal(connection):
         cursor.execute("SELECT CategoryId, CategoryName, FinancialGoal FROM ExpenseCategories")
         rows = cursor.fetchall()
         connection.commit()
-        print("Expense Categories:")
+        print("Expense Categories: ")
         for row in rows:
             category_id, category_name, goal = row
             print(f"ID: {category_id}, Category: {category_name}, Financial Goal: {goal}")
@@ -446,7 +446,7 @@ def view_all_categories(connection, table_name):
         print(f"Error retrieving categories: {e}")
             
 def submit():
-    #clear the text boxes
+    #clear the text boxes in the GUI
     cat_id.delete(0, END)
     Cat_name.delete(0, END)
     budget.delete(0, END)
