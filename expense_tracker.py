@@ -1,4 +1,14 @@
 import sqlite3 
+from tkinter import *
+from tkinter import messagebox
+from tkinter import filedialog
+import tkinter as tk
+from tkinter import ttk
+
+root = tk.Tk()
+root.title("Expense Tracker")
+root.iconbitmap("C:/Desktop/Expense Tracker/expense_tracker.ico")
+root.geometry("500x500")
 
 #creating & enabling conection
 def db_connect():
@@ -59,6 +69,8 @@ def create_tables(connection):
         connection.commit()
     except sqlite3.Error as e:
         print(f"Error creating tables: {e}")
+
+
 def add_expense_category(connection, category_name):
     """
     This function adds a new expense category to the ExpenseCategories table.
@@ -433,6 +445,44 @@ def view_all_categories(connection, table_name):
     except sqlite3.Error as e:
         print(f"Error retrieving categories: {e}")
             
+def submit():
+    #clear the text boxes
+    cat_id.delete(0, END)
+    Cat_name.delete(0, END)
+    budget.delete(0, END)
+    fin_goal.delete(0, END)
+
+    
+# create text boxes
+cat_id = Entry(root, width=30)
+cat_id.grid(row=0, column=1, padx=20, pady=(10, 0))
+
+Cat_name = Entry(root, width=30)
+Cat_name.grid(row=1, column=1, padx=20, pady=(10, 0))
+
+budget = Entry(root, width=30)
+budget.grid(row=2, column=1, padx=20, pady=(10, 0))
+
+fin_goal = Entry(root, width=30)
+fin_goal.grid(row=3, column=1, padx=20, pady=(10, 0))
+
+#create text box label 
+cat_id_label = Label(root, text="Category ID")
+cat_id_label.grid(row=0, column=0, pady=(10, 0))
+
+Cat_name_label = Label(root, text="Category Name")
+Cat_name_label.grid(row=1, column=0, pady=(10, 0))
+
+budget_label = Label(root, text="Budget")
+budget_label.grid(row=2, column=0, pady=(10, 0))
+
+fin_goal_label = Label(root, text="Financial Goal")
+fin_goal_label.grid(row=3, column=0, pady=(10, 0))
+
+# create submit button
+submit_butn = Button(root, text="Add record to database", command=submit)
+submit_butn.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+
 
 def main():
     """
@@ -554,3 +604,4 @@ def main():
 #call the main function
 if __name__ == "__main__":
     main()
+root.mainloop()
