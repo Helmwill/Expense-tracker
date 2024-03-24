@@ -1,6 +1,6 @@
 # Expense Tracker
 
-Expense Tracker is a Python-based application built to help users manage and track their expenses and income. The application uses SQLite for data storage and Tkinter for the graphical user interface.
+Expense Tracker is a Python-based application built to help users manage and track their expenses and income. The application uses SQLite for data storage and I am currently using Tkinter to build the graphical user interface.
 
 ## Features
 
