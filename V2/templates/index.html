@@ -3,18 +3,73 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Expense Tracker v2</title>
+  <title>Expense Tracker</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-  <main class="placeholder">
-    <p class="eyebrow">Expense Tracker</p>
-    <h1>Something good is being built here.</h1>
-    <p class="lede">
-      A calmer way to watch your savings grow — one small, visible win at a time.
-      We're setting things up now. Check back soon.
-    </p>
-    <p class="signoff">v2 · under construction</p>
+  <main class="page">
+    <header class="page-head">
+      <div>
+        <p class="eyebrow">Expense Tracker</p>
+        <h1>Your savings, growing.</h1>
+        <p class="lede">Every contribution counts — here's how far you've come.</p>
+      </div>
+      <a class="add-goal" href="/goals/new">+ Add a goal</a>
+    </header>
+
+    {% for tier in tiers %}
+      {% if tier.goals %}
+      <section class="tier tier--{{ tier.key }}">
+        <h2 class="tier-label">{{ tier.label }}</h2>
+        <div class="card-grid">
+          {% for goal in tier.goals %}
+          {% set is_overdraft = 'overdraft' in goal.name|lower %}
+          <article class="card">
+            <div class="card-head">
+              <span class="card-icon">
+                {% if goal.icon_path %}
+                <img src="/static/{{ goal.icon_path }}" alt="" width="24" height="24">
+                {% endif %}
+              </span>
+              <div class="card-title">
+                <h3>{{ goal.name }}</h3>
+                <p class="card-target">
+                  {% if is_overdraft %}£{{ "{:,.2f}".format(goal.target_amount) }} to clear{% else %}Target £{{ "{:,.2f}".format(goal.target_amount) }}{% endif %}
+                </p>
+              </div>
+            </div>
+
+            <div class="card-figures">
+              <p class="saved">
+                <span class="saved-amount">£{{ "{:,.2f}".format(goal.amount_saved) }}</span>
+                <span class="saved-label">saved</span>
+              </p>
+              <p class="remaining">
+                £{{ "{:,.2f}".format(goal.amount_remaining) }}
+                {% if is_overdraft %}left to clear{% else %}to go{% endif %}
+              </p>
+            </div>
+
+            <div class="progress" role="progressbar" aria-valuenow="{{ goal.percent }}" aria-valuemin="0" aria-valuemax="100">
+              <div class="progress-fill" style="width: {{ goal.percent }}%;"></div>
+            </div>
+            <p class="percent">{{ goal.percent }}% there</p>
+
+            <form class="contribute" method="post" action="/goals/{{ goal.id }}/contributions">
+              <input type="number" name="amount" step="0.01" min="0" placeholder="£ amount" required>
+              <input type="text" name="note" placeholder="Note (optional)">
+              <button type="submit">Add</button>
+            </form>
+
+            <form class="delete" method="post" action="/goals/{{ goal.id }}/delete">
+              <button type="submit" class="delete-btn">Remove goal</button>
+            </form>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+    {% endfor %}
   </main>
 </body>
 </html>
