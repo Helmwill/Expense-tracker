@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add a goal · Expense Tracker</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <main class="page page--narrow">
+    <header class="page-head">
+      <div>
+        <p class="eyebrow">Expense Tracker</p>
+        <h1>Add a goal</h1>
+        <p class="lede">Something to save towards — big or small.</p>
+      </div>
+    </header>
+
+    <form class="goal-form" method="post" action="/goals">
+      <label>
+        Name
+        <input type="text" name="name" required>
+      </label>
+      <label>
+        Tier
+        <select name="tier">
+          <option value="essential">Essential</option>
+          <option value="important">Important</option>
+          <option value="bonus">Bonus</option>
+        </select>
+      </label>
+      <label>
+        Target amount (£)
+        <input type="number" name="target_amount" step="0.01" min="0" required>
+      </label>
+
+      <div class="goal-form-actions">
+        <button type="submit">Create goal</button>
+        <a href="/">Cancel</a>
+      </div>
+    </form>
+  </main>
+</body>
+</html>
